@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+#include <float.h>
 
 /* Checks if a pointer is null. */
 #define IS_NULL(o) (NULL == (o))
@@ -15,26 +17,45 @@ typedef char Boolean;
 #define TRUE 1
 #define FALSE 0
 
+/* Simpler way to define a function-type.
+   --- Example ----------------------------------------------
+   int foo(int a, char* b) { ... }
+   FUNC(int, my_function, int, char*) = foo;
+   int result = my_function(42, "Quarante-Deux");
+   ---------------------------------------------------------- */
+#define FUNC(r, n, ...) r (*n)(__VA_ARGS__)
+
+/* Alias for a generic pointer. */
+typedef void* Any;
+
+/* Alias for a generic function, equivalent to : void foo(void) */
+typedef FUNC(void, AnyFunc, void);
+
+#define SIZE_OF(t) sizeof(t)
+#define SIZE_ARRAY(t, n) (n * SIZE_OF(t))
+
 /* Allocates memory and returns a pointer to it,
    or throws a fatal exception if an error occurred. */
-void* ensure_new(size_t size);
+Any ensure_new(size_t size);
 
 /* Simple macro to allocate instance of a given type and
    ensure success, with auto cast of the returned pointer.
    --- Example ----------------------------------------------
    int* my_allocated_int = NEW(int);
    ---------------------------------------------------------- */
-#define NEW(t) ((t*) ensure_new(sizeof(t)))
+#define NEW(t) ((t*) ensure_new(SIZE_OF(t)))
 
 /* Simple macro to allocate an array of instances of a given type and
    ensure success, with auto cast of the returned pointer.
    --- Example ----------------------------------------------
    int* my_array_of_int = NEW_MULTIPLE(int, 5);
    ---------------------------------------------------------- */
-#define NEW_MULTIPLE(t,n) ((t*) ensure_new(n * sizeof(t)))
+#define NEW_MULTIPLE(t, n) ((t*) ensure_new(SIZE_ARRAY(t, n)))
+
+void ensure_free(Any o);
 
 /* Simple macro to free previously allocated memory. */
-#define FREE free
+#define FREE ensure_free
 
 /* Simple macro to ensure that a given instance is free-able,
    exiting the current function if not. This macro should be used
@@ -54,6 +75,9 @@ void* ensure_new(size_t size);
    ---------------------------------------------------------- */
 #define POINTER(t) t*
 
+/* Array type (equivalent of pointer) */
+#define ARRAY(t) POINTER(t)
+
 /* Gets the address of an object.
    --- Example ----------------------------------------------
    int my_int = 42;
@@ -68,20 +92,6 @@ void* ensure_new(size_t size);
    printf("%d !", AT(my_pointer_on_int));
    ---------------------------------------------------------- */
 #define AT(t) *t
-
-/* Simpler way to define a function-type.
-   --- Example ----------------------------------------------
-   int foo(int a, char* b) { ... }
-   FUNC(int, my_function, int, char*) = foo;
-   int result = my_function(42, "Quarante-Deux");
-   ---------------------------------------------------------- */
-#define FUNC(r, n, ...) r (*n)(__VA_ARGS__)
-
-/* Alias for a generic pointer. */
-typedef void* Any;
-
-/* Alias for a generic function, equivalent to : void foo(void) */
-typedef FUNC(void, AnyFunc, void);
 
 /* Function-like casting macro.
    --- Example ----------------------------------------------
@@ -193,6 +203,19 @@ typedef FUNC(void, AnyFunc, void);
    ---------------------------------------------------------- */
 #define RANGE(index, start, end, step) \
     int index; \
-    for (index = start; index < end; i += step)
+    for (index = start; index < end; index += step)
+
+#define DOUBLE_RANGE(index1, start1, end1, step1, index2, start2, end2, step2) \
+    int index1, index2; \
+    for (index1 = start1; index1 < end1; index1 += step1) \
+        for (index2 = start2; index2 < end2; index2 += step2)
+
+#define FLOAT_EQUALS(a, b) (fabs((a) - (b)) < DBL_EPSILON)
+
+#define FIELD(o, f) (o -> f)
+#define METHOD(o, m, ...) ({ \
+        __typeof__ (o) _o = (o); \
+        (_o -> m(_o, ## __VA_ARGS__)); \
+    })
 
 #endif

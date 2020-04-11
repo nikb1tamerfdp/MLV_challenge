@@ -7,16 +7,16 @@
 #include "../../includes/util/error.h"
 
 /* --- declaration of private helpers */
-Boolean _index_is_in_bounds(String* self, int index);
+Boolean _String_index_is_in_bounds(String self, int index);
 int _adapt_neg_index(int length, int index);
-String* _concat(char* a, int a_len, char* b, int b_len);
+String _concat(char* a, int a_len, char* b, int b_len);
 
-String* String_new(char* str)
+String String_new(char* str)
 {
     
     REQUIRE_NON_NULL(str);
 
-    String* self = NEW(String);
+    String self = NEW(_String);
     int len = strlen(str);
     STR(self) = NEW_MULTIPLE(char, len + 1);
     memcpy(STR(self), str, len + 1);
@@ -26,7 +26,7 @@ String* String_new(char* str)
 
 }
 
-String* String_sub(String* self, int start, int end)
+String String_sub(String self, int start, int end)
 {
 
     REQUIRE_NON_NULL(self);
@@ -37,7 +37,7 @@ String* String_sub(String* self, int start, int end)
     start = MIN(start, end);
     end = MAX(start, end);
 
-    if (!_index_is_in_bounds(self, start) || !_index_is_in_bounds(self, end))
+    if (!_String_index_is_in_bounds(self, start) || !_String_index_is_in_bounds(self, end))
         THROW_AND_KILL("Index out of bounds !", "Cannot get sub-string [%d:%d] of '%s'.", start, end, STR(self));
 
     int sub_length = end - start;
@@ -49,7 +49,7 @@ String* String_sub(String* self, int start, int end)
 
 }
 
-String* String_concat_str_str(String* self, String* other)
+String String_concat_str_str(String self, String other)
 {
     
     REQUIRE_NON_NULL(self);
@@ -59,7 +59,7 @@ String* String_concat_str_str(String* self, String* other)
 
 }
 
-String* String_concat_str_raw(String* self, char* other)
+String String_concat_str_raw(String self, char* other)
 {
 
     REQUIRE_NON_NULL(self);
@@ -69,7 +69,7 @@ String* String_concat_str_raw(String* self, char* other)
 
 }
 
-String* String_concat_raw_str(char* self, String* other)
+String String_concat_raw_str(char* self, String other)
 {
 
     REQUIRE_NON_NULL(self);
@@ -79,7 +79,7 @@ String* String_concat_raw_str(char* self, String* other)
 
 }
 
-String* String_concat_raw_raw(char* self, char* other)
+String String_concat_raw_raw(char* self, char* other)
 {
 
     REQUIRE_NON_NULL(self);
@@ -89,12 +89,12 @@ String* String_concat_raw_raw(char* self, char* other)
 
 }
 
-LIST_OF(String) String_split(String* self, char separator, Boolean keep_empty_tokens)
+LIST_OF(String) String_split(String self, char separator, Boolean keep_empty_tokens)
 {
 
     REQUIRE_NON_NULL(self);
 
-    LIST_OF(String) tokens = List_new();
+    LIST_OF(String) tokens = LIST_NEW();
 
     int start = 0, index;
     for (index = 0; index < STR_LEN(self); index++)
@@ -104,7 +104,7 @@ LIST_OF(String) String_split(String* self, char separator, Boolean keep_empty_to
             continue;
         
         if ((start != index) || keep_empty_tokens)
-            List_append(tokens, String_sub(self, start, index));
+            LIST_APPEND(tokens, String_sub(self, start, index));
 
         start = index + 1;
 
@@ -114,7 +114,7 @@ LIST_OF(String) String_split(String* self, char separator, Boolean keep_empty_to
 
 }
 
-void String_print(String* self)
+void String_print(String self)
 {
     
     REQUIRE_NON_NULL(self);
@@ -123,7 +123,7 @@ void String_print(String* self)
 
 }
 
-void String_free(String* self)
+void String_free(String self)
 {
     
     ENSURE_FREEABLE(self);
@@ -134,7 +134,8 @@ void String_free(String* self)
 }
 
 /* --- private helpers */
-Boolean _index_is_in_bounds(String* self, int index)
+
+Boolean _String_index_is_in_bounds(String self, int index)
 {
     return (0 <= index) && (index < STR_LEN(self));
 }
@@ -144,7 +145,7 @@ int _adapt_neg_index(int length, int index)
     return (index < 0) ? (index + length) : index;
 }
 
-String* _concat(char* a, int a_len, char* b, int b_len)
+String _concat(char* a, int a_len, char* b, int b_len)
 {
 
     REQUIRE_NON_NULL(a);

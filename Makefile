@@ -1,30 +1,59 @@
 GCC=gcc
 CFLAGS=-Wall -ansi -O2
 
-OBJ=bin/util.lang.o \
-	bin/util.contract.o \
-	bin/util.func.o \
-	bin/util.list.o \
-	bin/util.str.o \
-	bin/util.error.o \
-	bin/util.misc.o \
-	bin/main.o \
-	bin/game.o \
-	bin/interface.o \
-	bin/acquisition.o \
-	bin/plugins.o
+OBJ_UTIL=bin/util.lang.o \
+		 bin/util.contract.o \
+		 bin/util.func.o \
+		 bin/util.list.o \
+		 bin/util.tree.o \
+		 bin/util.str.o \
+		 bin/util.error.o \
+		 bin/util.misc.o \
+		 bin/util.matrix.o
 
-HEADERS=includes/util/lang.h \
-		includes/util/contract.h \
-		includes/util/func.h \
-		includes/util/list.h \
-		includes/util/str.h \
-		includes/util/error.h \
-		includes/util/misc.h \
-		includes/game.h \
-		includes/interface.h \
-		includes/acquisition.h \
-		includes/plugins.h
+OBJ_UI=bin/ui.transform.o \
+	   bin/ui.point.o \
+	   bin/ui.scene.o \
+	   bin/ui.drawables.drawable.o \
+	   bin/ui.drawables.ellipse.o \
+	   bin/ui.drawables.sprite.o
+
+OBJ_GAME=bin/game.entity.o
+
+OBJ_CHALLENGE=bin/game.o \
+			  bin/interface.o \
+			  bin/acquisition.o \
+			  bin/plugins.o \
+			  bin/main.o
+
+OBJ=$(OBJ_UTIL) $(OBJ_UI) $(OBJ_GAME) $(OBJ_CHALLENGE)
+
+HEADERS_UTIL=includes/util/lang.h \
+			 includes/util/contract.h \
+			 includes/util/func.h \
+			 includes/util/list.h \
+			 includes/util/tree.h \
+			 includes/util/str.h \
+			 includes/util/error.h \
+			 includes/util/misc.h \
+			 includes/util/matrix.h
+
+HEADERS_UI=includes/ui/transform.h \
+		   includes/ui/point.h \
+		   includes/ui/scene.h \
+		   includes/ui/drawables/drawable.h \
+		   includes/ui/drawables/shapes.h \
+		   includes/ui/drawables/ellipse.h \
+		   includes/ui/drawables/sprite.h
+
+HEADERS_GAME=includes/game/entity.h
+
+HEADERS_CHALLENGE=includes/game.h \
+				  includes/interface.h \
+				  includes/acquisition.h \
+				  includes/plugins.h
+
+HEADERS=$(HEADERS_UTIL) $(HEADERS_UI) $(HEADERS_GAME) $(HEADERS_CHALLENGE)
 
 PLUGINS=plugins/full_dummy.so \
 		plugins/rand_all.so \
@@ -51,6 +80,9 @@ bin/util.func.o: src/util/func.c $(HEADERS)
 bin/util.list.o: src/util/list.c $(HEADERS)
 	$(GCC) -c src/util/list.c -o bin/util.list.o $(CFLAGS) -lMLV -ldl
 
+bin/util.tree.o: src/util/tree.c $(HEADERS)
+	$(GCC) -c src/util/tree.c -o bin/util.tree.o $(CFLAGS) -lMLV -ldl
+
 bin/util.str.o: src/util/str.c $(HEADERS)
 	$(GCC) -c src/util/str.c -o bin/util.str.o $(CFLAGS) -lMLV -ldl
 
@@ -60,8 +92,29 @@ bin/util.error.o: src/util/error.c $(HEADERS)
 bin/util.misc.o: src/util/misc.c $(HEADERS)
 	$(GCC) -c src/util/misc.c -o bin/util.misc.o $(CFLAGS) -lMLV -ldl
 
-bin/main.o: src/main.c $(HEADERS)
-	$(GCC) -c src/main.c -o bin/main.o $(CFLAGS) -lMLV -ldl
+bin/util.matrix.o: src/util/matrix.c $(HEADERS)
+	$(GCC) -c src/util/matrix.c -o bin/util.matrix.o $(CFLAGS) -lMLV -ldl
+
+bin/ui.transform.o: src/ui/transform.c $(HEADERS)
+	$(GCC) -c src/ui/transform.c -o bin/ui.transform.o $(CFLAGS) -lMLV -ldl
+
+bin/ui.point.o: src/ui/point.c $(HEADERS)
+	$(GCC) -c src/ui/point.c -o bin/ui.point.o $(CFLAGS) -lMLV -ldl
+
+bin/ui.scene.o: src/ui/scene.c $(HEADERS)
+	$(GCC) -c src/ui/scene.c -o bin/ui.scene.o $(CFLAGS) -lMLV -ldl
+
+bin/ui.drawables.drawable.o: src/ui/drawables/drawable.c $(HEADERS)
+	$(GCC) -c src/ui/drawables/drawable.c -o bin/ui.drawables.drawable.o $(CFLAGS) -lMLV -ldl
+
+bin/ui.drawables.ellipse.o: src/ui/drawables/ellipse.c $(HEADERS)
+	$(GCC) -c src/ui/drawables/ellipse.c -o bin/ui.drawables.ellipse.o $(CFLAGS) -lMLV -ldl -lm
+
+bin/ui.drawables.sprite.o: src/ui/drawables/sprite.c $(HEADERS)
+	$(GCC) -c src/ui/drawables/sprite.c -o bin/ui.drawables.sprite.o $(CFLAGS) -lMLV -ldl -lm
+
+bin/game.entity.o:src/game/entity.c $(HEADERS)
+	$(GCC) -c src/game/entity.c -o bin/game.entity.o $(CFLAGS) -lMLV -ldl
 
 bin/game.o: src/game.c includes/game.h
 	$(GCC) -c src/game.c -o bin/game.o $(CFLAGS) -lm
@@ -74,6 +127,9 @@ bin/acquisition.o: src/acquisition.c includes/acquisition.h
 
 bin/plugins.o: src/plugins.c includes/plugins.h
 	$(GCC) -c src/plugins.c -o bin/plugins.o $(CFLAGS) -lrt
+
+bin/main.o: src/main.c $(HEADERS)
+	$(GCC) -c src/main.c -o bin/main.o $(CFLAGS) -lMLV -ldl
 
 #############################
 #     Plugins examples      #

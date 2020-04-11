@@ -21,7 +21,7 @@ void _AI_init(AI* ai);
 Plugin* _Plugin_new(char* name);
 Exception load_entry_point(void* handle, char* name, OUTPUT_ANY_FUNC(output));
 Exception open_plugin(char* path, char* name, OUTPUT_ANY_OBJECT(output));
-Exception load_plugin(Plugin* plugin, String* path);
+Exception load_plugin(Plugin* plugin, String path);
 
 LIST_OF(Plugin) Plugin_load_all(char* directory)
 {
@@ -32,15 +32,15 @@ LIST_OF(Plugin) Plugin_load_all(char* directory)
     int n = _discover_plugins("plugins", &plugins_entries);
     printf("Potential plugins found : %d\n", n);
 
-    LIST_OF(Plugin) plugins = List_new();
+    LIST_OF(Plugin) plugins = LIST_NEW();
 
     RANGE(i, 0, n, 1)
     {
 
         /* get full path and plugin name */
-        String* file_name = String_new((plugins_entries[i]) -> d_name);
-        String* full_path = String_concat_raw_str(directory, file_name);
-        String* plugin_name = String_sub(file_name, 0, -3);
+        String file_name = String_new((plugins_entries[i]) -> d_name);
+        String full_path = String_concat_raw_str(directory, file_name);
+        String plugin_name = String_sub(file_name, 0, -3);
         String_free(file_name);
 
         Plugin* plugin = _Plugin_new(STR(plugin_name));
@@ -57,7 +57,7 @@ LIST_OF(Plugin) Plugin_load_all(char* directory)
         /* add the plugin to the list of successfully loaded ones */
         printf("Plugin '%s' has been successfully loaded !\n", STR(plugin_name));
         plugin -> ok = TRUE;
-        List_append(plugins, plugin);
+        LIST_APPEND(plugins, plugin);
 
     }
 
@@ -149,7 +149,7 @@ Exception open_plugin(char* path, char* name, OUTPUT_ANY_OBJECT(output))
 
 }
 
-Exception load_plugin(Plugin* plugin, String* path)
+Exception load_plugin(Plugin* plugin, String path)
 {
 
     AI* ai = &(plugin -> ai);

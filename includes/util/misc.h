@@ -20,4 +20,9 @@ double get_absolute_time(void);
 /* Initializes a new seed for the randomizator. */
 #define INIT_RANDOM() srand(time(NULL))
 
+#define PI 3.14159265358979323846
+
+#define DEG_TO_RAD(angle) (angle * PI / 180)
+#define RAD_TO_DEG(angle) (angle * 180 / PI)
+
 #endif

@@ -102,10 +102,14 @@ void free_graphical_window(ParamInterface *gp)
 void display_fps(ParamInterface *gp, int frame_number, int busy)
 {
     char s[128];
+    
+    int sec = frame_number / NB_FRAME_PER_SEC;
+    int min = sec / 60;
+    sec %= 60;
 
     MLV_draw_line(gp->abs_max + 1, gp->ord_max - 25, gp->abs_max + gp->menu_width,
                   gp->ord_max - 25, MLV_rgba(255, 255, 255, 255));
-    sprintf(s, "(charge : %03d/100)  %d s - %02d frames", busy, frame_number / NB_FRAME_PER_SEC, frame_number % NB_FRAME_PER_SEC);
+    sprintf(s, "(charge : %03d/100)  %02d:%02d - %02d frames", busy, min, sec, frame_number % NB_FRAME_PER_SEC);
     MLV_draw_text(gp->abs_max + (gp->menu_width / 2) - 110, gp->ord_max - 20, s, MLV_rgba(255, 255, 255, 255));
 }
 
@@ -312,11 +316,28 @@ void free_graphical_paramters(ParamInterface *gp)
 
 void draw_introduction(ParamInterface *gp)
 {
-    MLV_Image *intro = MLV_load_image("img/intro.png");
+    MLV_Image *intro = MLV_load_image("assets/graphics/images/SplashScreen.png");
 
-    MLV_draw_image(intro, 0, 0);
+    int x = (gp -> abs_max + gp -> menu_width) / 2 - 400;
+    int y = gp -> ord_max / 2 - 400;
+    MLV_draw_image(intro, x, y);
     MLV_actualise_window();
     MLV_wait_keyboard_or_mouse(NULL, NULL, NULL, NULL, NULL);
+}
+
+void draw_plugin_box(int index, Any _plugin) {
+    
+    Plugin* plugin = CAST(Plugin*, _plugin);
+
+    MLV_draw_text_box(70, 110 + (index * 39), 200, 40,
+                      plugin -> name, 0,
+                      MLV_COLOR_WHITE, MLV_COLOR_WHITE, MLV_COLOR_BLACK,
+                      MLV_TEXT_CENTER, MLV_HORIZONTAL_CENTER, MLV_VERTICAL_CENTER);
+    
+}
+
+Boolean only_ok_plugins(int __, Any plugin) {
+    return CAST(Plugin*, plugin) -> ok;
 }
 
 int draw_selection_space(ParamInterface *gp, LIST_OF(Plugin) plugins, Space *W)
@@ -340,15 +361,19 @@ int draw_selection_space(ParamInterface *gp, LIST_OF(Plugin) plugins, Space *W)
 
     MLV_draw_text(300, ord_current, "Starship bot available : ", MLV_rgba(255, 255, 255, 255));
 
-    MLV_draw_line(70, 70, 70, 750, MLV_rgba(255, 255, 255, 255));
+    /*MLV_draw_line(70, 70, 70, 750, MLV_rgba(255, 255, 255, 255));
     MLV_draw_line(270, 110, 270, 750, MLV_rgba(255, 255, 255, 255));
     MLV_draw_line(470, 110, 470, 750, MLV_rgba(255, 255, 255, 255));
     MLV_draw_line(670, 70, 670, 750, MLV_rgba(255, 255, 255, 255));
-    MLV_draw_line(70, 70, 670, 70, MLV_rgba(255, 255, 255, 255));
+    MLV_draw_line(70, 70, 670, 70, MLV_rgba(255, 255, 255, 255));*/
 
+    LIST_FOR_EACH_INDEXED(plugins, draw_plugin_box, only_ok_plugins);
+
+/*
     for (i = 0; i < 18; i++)
         MLV_draw_line(70, 70 + i * 40, 670, 70 + i * 40, MLV_rgba(255, 255, 255, 255));
-
+*/
+    i = 18;/*
     ListItem plugin_index = HEAD(plugins);
     while (NON_NULL(plugin_index))
     {
@@ -375,7 +400,7 @@ int draw_selection_space(ParamInterface *gp, LIST_OF(Plugin) plugins, Space *W)
         
         plugin_index = NEXT(plugin_index);
 
-    }
+    }*/
 
     abs_current += 200;
     ord_current = 85;
@@ -436,9 +461,9 @@ int draw_selection_space(ParamInterface *gp, LIST_OF(Plugin) plugins, Space *W)
             selected_plugin += 16;
         if (x > 470)
             selected_plugin += 16;
-        if (selected_plugin < LIST_SIZE(plugins))
+        if (selected_plugin >= 0 && selected_plugin < LIST_SIZE(plugins))
         {
-            Plugin* the_selected_plugin = LIST_GET(Plugin*, plugins, selected_plugin);
+            Plugin* the_selected_plugin = LIST_GET_AS(plugins, selected_plugin, Plugin*);
             if (nb_starship < 12 && !(the_selected_plugin->selected))
             {
                 the_selected_plugin -> selected = 1;

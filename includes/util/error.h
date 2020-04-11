@@ -28,12 +28,9 @@ void Exception_free(Exception self);
 #define LEAVE_WITHOUT_ERROR return NO_ERROR
 #define HAS_ERROR(e) (NO_ERROR != (e))
 #define NOT_ERROR(e) (NO_ERROR == (e))
-#define ERROR(r, m, ...) Exception_new(__FILE__, __LINE__, r, m, __VA_ARGS__)
-#define ERROR_UNFORMATTED(r, m) Exception_new(__FILE__, __LINE__, r, m)
-#define THROW(r, m, ...) return ERROR(r, m, __VA_ARGS__)
-#define THROW_UNFORMATTED(r, m) return ERROR_UNFORMATTED(r, m)
-#define THROW_AND_KILL(r, m, ...) Exception_log(ERROR(r, m, __VA_ARGS__), TRUE)
-#define THROW_UNFORMATTED_AND_KILL(r, m) Exception_log(ERROR_UNFORMATTED(r, m), TRUE)
+#define ERROR(r, m, ...) Exception_new(__FILE__, __LINE__, r, m, ## __VA_ARGS__)
+#define THROW(r, m, ...) return ERROR(r, m, ## __VA_ARGS__)
+#define THROW_AND_KILL(r, m, ...) Exception_log(ERROR(r, m, ## __VA_ARGS__), TRUE)
 #define PROPAGATE(e) return e
 #define PROPAGATE_IF_THROWN(e) if (NON_NULL(e)) { PROPAGATE(e); }
 

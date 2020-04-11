@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "lang.h"
+
 /* Transforms a pointer to another it it's null. */
 #define IF_NULL_DEFAULT(o, d) (IS_NULL(o) ? (d) : (o))
 
@@ -25,5 +27,9 @@ void* require_non_null(void* o, char* file, int line);
    Error: Object is null (at my_file.c:14)\n
    ------------------------------------------------- */
 #define REQUIRE_NON_NULL(o) require_non_null(o, __FILE__, __LINE__)
+
+void require_that(Boolean condition, char* file, int line);
+
+#define REQUIRE_THAT(c) require_that(c, __FILE__, __LINE__)
 
 #endif

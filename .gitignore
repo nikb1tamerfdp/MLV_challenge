@@ -1,2 +1,7 @@
 *~
 */*~
+.vscode/
+*/.info_frame.txt
+bin/
+**/*.o
+**/*.so

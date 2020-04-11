@@ -1,11 +1,11 @@
 #ifndef _GAME_
 #define _GAME_
 
+#include "util/misc.h"
 #include "acquisition.h"
 
 #define NB_FRAME_PER_SEC 32
 #define LIFE_STARSHIP 4
-#define PI 3.14159265359
 #define SIZE_ABS 10
 #define SIZE_ORD 10
 #define SIZE_STARSHIP 0.25
