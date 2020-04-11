@@ -1,4 +1,4 @@
-#include "../includes/interface.h"
+#include "interface.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

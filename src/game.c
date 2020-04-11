@@ -1,5 +1,5 @@
-#include "../includes/game.h"
-#include "../includes/plugins.h"
+#include "game.h"
+#include "plugins.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

@@ -6,19 +6,19 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../includes/util/misc.h"
-#include "../includes/util/error.h"
-#include "../includes/game.h"
-#include "../includes/interface.h"
-#include "../includes/acquisition.h"
-#include "../includes/util/str.h"
-#include "../includes/util/list.h"
-#include "../includes/util/matrix.h"
-#include "../includes/ui/drawables/drawable.h"
-#include "../includes/ui/scene.h"
-#include "../includes/ui/drawables/shapes.h"
-#include "../includes/ui/drawables/ellipse.h"
-#include "../includes/ui/drawables/sprite.h"
+#include "MLVEngine/util/misc.h"
+#include "MLVEngine/util/error.h"
+#include "game.h"
+#include "interface.h"
+#include "acquisition.h"
+#include "MLVEngine/util/str.h"
+#include "MLVEngine/util/list.h"
+#include "MLVEngine/util/matrix.h"
+#include "MLVEngine/ui/drawables/drawable.h"
+#include "MLVEngine/ui/scene.h"
+#include "MLVEngine/ui/drawables/shapes.h"
+#include "MLVEngine/ui/drawables/ellipse.h"
+#include "MLVEngine/ui/drawables/sprite.h"
 
 /* void set_space(Space *adrr); */
 /* void initialise_space(Space *S); */

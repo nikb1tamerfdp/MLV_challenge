@@ -13,8 +13,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../includes/acquisition.h"
-#include "../includes/plugins.h"
+#include "acquisition.h"
+#include "plugins.h"
 
 static int turn_move=0;
 static int turn_gun=0;

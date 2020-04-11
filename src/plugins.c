@@ -7,11 +7,11 @@
 #include <dirent.h>
 #include <string.h>
 
-#include "../includes/plugins.h"
-#include "../includes/util/misc.h"
-#include "../includes/util/error.h"
-#include "../includes/util/str.h"
-#include "../includes/util/list.h"
+#include "plugins.h"
+#include "MLVEngine/util/misc.h"
+#include "MLVEngine/util/error.h"
+#include "MLVEngine/util/str.h"
+#include "MLVEngine/util/list.h"
 
 /* --- declaration of private helpers */
 int _only_so_files(const struct dirent *d);

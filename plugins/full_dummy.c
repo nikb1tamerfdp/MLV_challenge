@@ -9,8 +9,8 @@
  */
 
 #include <stdio.h>
-#include "../includes/acquisition.h"
-#include "../includes/plugins.h"
+#include "acquisition.h"
+#include "plugins.h"
 
 void decision_frame(Decision_frame* d);
 void initialize_my_AI(void);

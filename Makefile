@@ -1,24 +1,48 @@
 GCC=gcc
-CFLAGS=-Wall -ansi -O2
+CFLAGS=-Wall -ansi -O2 -Iincludes
 
-OBJ_UTIL=bin/util.lang.o \
-		 bin/util.contract.o \
-		 bin/util.func.o \
-		 bin/util.list.o \
-		 bin/util.tree.o \
-		 bin/util.str.o \
-		 bin/util.error.o \
-		 bin/util.misc.o \
-		 bin/util.matrix.o
+OBJ_MLVE_UTIL=bin/MLVEngine/util.lang.o \
+		 bin/MLVEngine/util.contract.o \
+		 bin/MLVEngine/util.func.o \
+		 bin/MLVEngine/util.list.o \
+		 bin/MLVEngine/util.tree.o \
+		 bin/MLVEngine/util.str.o \
+		 bin/MLVEngine/util.error.o \
+		 bin/MLVEngine/util.misc.o \
+		 bin/MLVEngine/util.matrix.o
 
-OBJ_UI=bin/ui.transform.o \
-	   bin/ui.point.o \
-	   bin/ui.scene.o \
-	   bin/ui.drawables.drawable.o \
-	   bin/ui.drawables.ellipse.o \
-	   bin/ui.drawables.sprite.o
+OBJ_MLVE_UI=bin/MLVEngine/ui.transform.o \
+	   bin/MLVEngine/ui.point.o \
+	   bin/MLVEngine/ui.scene.o \
+	   bin/MLVEngine/ui.drawables.drawable.o \
+	   bin/MLVEngine/ui.drawables.ellipse.o \
+	   bin/MLVEngine/ui.drawables.sprite.o
 
-OBJ_GAME=bin/game.entity.o
+OBJ_MLVE_GAME=bin/MLVEngine/game.entity.o
+
+OBJ_MLVE=$(OBJ_MLVE_UTIL) $(OBJ_MLVE_UI) $(OBJ_MLVE_GAME)
+
+HEADERS_MLVE_UTIL=includes/MLVEngine/util/lang.h \
+				  includes/MLVEngine/util/contract.h \
+				  includes/MLVEngine/util/func.h \
+			 	  includes/MLVEngine/util/list.h \
+				  includes/MLVEngine/util/tree.h \
+			 	  includes/MLVEngine/util/str.h \
+			 	  includes/MLVEngine/util/error.h \
+			 	  includes/MLVEngine/util/misc.h \
+			 	  includes/MLVEngine/util/matrix.h
+
+HEADERS_MLVE_UI=includes/MLVEngine/ui/transform.h \
+		   		includes/MLVEngine/ui/point.h \
+		   		includes/MLVEngine/ui/scene.h \
+		   		includes/MLVEngine/ui/drawables/drawable.h \
+		   		includes/MLVEngine/ui/drawables/shapes.h \
+		   		includes/MLVEngine/ui/drawables/ellipse.h \
+		   		includes/MLVEngine/ui/drawables/sprite.h
+
+HEADERS_MLVE_GAME=includes/MLVEngine/game/entity.h
+
+HEADERS_MLVE=$(HEADERS_MLVE_UTIL) $(HEADERS_MLVE_UI) $(HEADERS_MLVE_GAME)
 
 OBJ_CHALLENGE=bin/game.o \
 			  bin/interface.o \
@@ -26,34 +50,14 @@ OBJ_CHALLENGE=bin/game.o \
 			  bin/plugins.o \
 			  bin/main.o
 
-OBJ=$(OBJ_UTIL) $(OBJ_UI) $(OBJ_GAME) $(OBJ_CHALLENGE)
-
-HEADERS_UTIL=includes/util/lang.h \
-			 includes/util/contract.h \
-			 includes/util/func.h \
-			 includes/util/list.h \
-			 includes/util/tree.h \
-			 includes/util/str.h \
-			 includes/util/error.h \
-			 includes/util/misc.h \
-			 includes/util/matrix.h
-
-HEADERS_UI=includes/ui/transform.h \
-		   includes/ui/point.h \
-		   includes/ui/scene.h \
-		   includes/ui/drawables/drawable.h \
-		   includes/ui/drawables/shapes.h \
-		   includes/ui/drawables/ellipse.h \
-		   includes/ui/drawables/sprite.h
-
-HEADERS_GAME=includes/game/entity.h
+OBJ=$(OBJ_MLVE) $(OBJ_CHALLENGE)
 
 HEADERS_CHALLENGE=includes/game.h \
 				  includes/interface.h \
 				  includes/acquisition.h \
 				  includes/plugins.h
 
-HEADERS=$(HEADERS_UTIL) $(HEADERS_UI) $(HEADERS_GAME) $(HEADERS_CHALLENGE)
+HEADERS=$(HEADERS_MLVE) $(HEADERS_CHALLENGE)
 
 PLUGINS=plugins/full_dummy.so \
 		plugins/rand_all.so \
@@ -68,53 +72,53 @@ all: $(EXECUTABLE) $(PLUGINS)
 $(EXECUTABLE): $(OBJ)
 	$(GCC) -o $(EXECUTABLE) $(OBJ) $(CFLAGS) -lMLV -lm -ldl
 
-bin/util.lang.o: src/util/lang.c $(HEADERS)
-	$(GCC) -c src/util/lang.c -o bin/util.lang.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/util.lang.o: src/MLVEngine/util/lang.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/util/lang.c -o bin/MLVEngine/util.lang.o $(CFLAGS) -lMLV -ldl
 
-bin/util.contract.o: src/util/contract.c $(HEADERS)
-	$(GCC) -c src/util/contract.c -o bin/util.contract.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/util.contract.o: src/MLVEngine/util/contract.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/util/contract.c -o bin/MLVEngine/util.contract.o $(CFLAGS) -lMLV -ldl
 
-bin/util.func.o: src/util/func.c $(HEADERS)
-	$(GCC) -c src/util/func.c -o bin/util.func.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/util.func.o: src/MLVEngine/util/func.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/util/func.c -o bin/MLVEngine/util.func.o $(CFLAGS) -lMLV -ldl
 
-bin/util.list.o: src/util/list.c $(HEADERS)
-	$(GCC) -c src/util/list.c -o bin/util.list.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/util.list.o: src/MLVEngine/util/list.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/util/list.c -o bin/MLVEngine/util.list.o $(CFLAGS) -lMLV -ldl
 
-bin/util.tree.o: src/util/tree.c $(HEADERS)
-	$(GCC) -c src/util/tree.c -o bin/util.tree.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/util.tree.o: src/MLVEngine/util/tree.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/util/tree.c -o bin/MLVEngine/util.tree.o $(CFLAGS) -lMLV -ldl
 
-bin/util.str.o: src/util/str.c $(HEADERS)
-	$(GCC) -c src/util/str.c -o bin/util.str.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/util.str.o: src/MLVEngine/util/str.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/util/str.c -o bin/MLVEngine/util.str.o $(CFLAGS) -lMLV -ldl
 
-bin/util.error.o: src/util/error.c $(HEADERS)
-	$(GCC) -c src/util/error.c -o bin/util.error.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/util.error.o: src/MLVEngine/util/error.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/util/error.c -o bin/MLVEngine/util.error.o $(CFLAGS) -lMLV -ldl
 
-bin/util.misc.o: src/util/misc.c $(HEADERS)
-	$(GCC) -c src/util/misc.c -o bin/util.misc.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/util.misc.o: src/MLVEngine/util/misc.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/util/misc.c -o bin/MLVEngine/util.misc.o $(CFLAGS) -lMLV -ldl
 
-bin/util.matrix.o: src/util/matrix.c $(HEADERS)
-	$(GCC) -c src/util/matrix.c -o bin/util.matrix.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/util.matrix.o: src/MLVEngine/util/matrix.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/util/matrix.c -o bin/MLVEngine/util.matrix.o $(CFLAGS) -lMLV -ldl
 
-bin/ui.transform.o: src/ui/transform.c $(HEADERS)
-	$(GCC) -c src/ui/transform.c -o bin/ui.transform.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/ui.transform.o: src/MLVEngine/ui/transform.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/ui/transform.c -o bin/MLVEngine/ui.transform.o $(CFLAGS) -lMLV -ldl
 
-bin/ui.point.o: src/ui/point.c $(HEADERS)
-	$(GCC) -c src/ui/point.c -o bin/ui.point.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/ui.point.o: src/MLVEngine/ui/point.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/ui/point.c -o bin/MLVEngine/ui.point.o $(CFLAGS) -lMLV -ldl
 
-bin/ui.scene.o: src/ui/scene.c $(HEADERS)
-	$(GCC) -c src/ui/scene.c -o bin/ui.scene.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/ui.scene.o: src/MLVEngine/ui/scene.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/ui/scene.c -o bin/MLVEngine/ui.scene.o $(CFLAGS) -lMLV -ldl
 
-bin/ui.drawables.drawable.o: src/ui/drawables/drawable.c $(HEADERS)
-	$(GCC) -c src/ui/drawables/drawable.c -o bin/ui.drawables.drawable.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/ui.drawables.drawable.o: src/MLVEngine/ui/drawables/drawable.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/ui/drawables/drawable.c -o bin/MLVEngine/ui.drawables.drawable.o $(CFLAGS) -lMLV -ldl
 
-bin/ui.drawables.ellipse.o: src/ui/drawables/ellipse.c $(HEADERS)
-	$(GCC) -c src/ui/drawables/ellipse.c -o bin/ui.drawables.ellipse.o $(CFLAGS) -lMLV -ldl -lm
+bin/MLVEngine/ui.drawables.ellipse.o: src/MLVEngine/ui/drawables/ellipse.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/ui/drawables/ellipse.c -o bin/MLVEngine/ui.drawables.ellipse.o $(CFLAGS) -lMLV -ldl -lm
 
-bin/ui.drawables.sprite.o: src/ui/drawables/sprite.c $(HEADERS)
-	$(GCC) -c src/ui/drawables/sprite.c -o bin/ui.drawables.sprite.o $(CFLAGS) -lMLV -ldl -lm
+bin/MLVEngine/ui.drawables.sprite.o: src/MLVEngine/ui/drawables/sprite.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/ui/drawables/sprite.c -o bin/MLVEngine/ui.drawables.sprite.o $(CFLAGS) -lMLV -ldl -lm
 
-bin/game.entity.o:src/game/entity.c $(HEADERS)
-	$(GCC) -c src/game/entity.c -o bin/game.entity.o $(CFLAGS) -lMLV -ldl
+bin/MLVEngine/game.entity.o:src/MLVEngine/game/entity.c $(HEADERS)
+	$(GCC) -c src/MLVEngine/game/entity.c -o bin/MLVEngine/game.entity.o $(CFLAGS) -lMLV -ldl
 
 bin/game.o: src/game.c includes/game.h
 	$(GCC) -c src/game.c -o bin/game.o $(CFLAGS) -lm

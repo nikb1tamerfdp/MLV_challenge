@@ -2,7 +2,7 @@
 #include <string.h>
 #include <math.h>
 #include <assert.h>
-#include "../includes/acquisition.h"
+#include "acquisition.h"
 
 #define ANGLE_VISION 0.4
 #define PI 3.14159265359
